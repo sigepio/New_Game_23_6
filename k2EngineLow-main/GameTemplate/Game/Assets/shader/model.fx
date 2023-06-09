@@ -23,14 +23,23 @@ struct SSkinVSIn{
 };
 //頂点シェーダーへの入力。
 struct SVSIn{
-	float4 pos 		: POSITION;		//モデルの頂点座標。
-	float2 uv 		: TEXCOORD0;	//UV座標。
-	SSkinVSIn skinVert;				//スキン用のデータ。
+	float4 pos			: POSITION;		//モデルの頂点座標。
+    float2 uv			: TEXCOORD0;	//UV座標。
+    //float3 tangent		: TANGENT;		
+    //float3 biNormal		: BINORMAL;
+	//float3 normal		: NORMAL;		//法線
+	SSkinVSIn skinVert;					//スキン用のデータ。
 };
 //ピクセルシェーダーへの入力。
 struct SPSIn{
 	float4 pos 			: SV_POSITION;	//スクリーン空間でのピクセルの座標。
 	float2 uv 			: TEXCOORD0;	//uv座標。
+	float3 worldPos		: TEXCOORD1;	//ワールド座標
+	///float3 normal		: NORMAL;		//法線
+    //float3 tangent		: TANGENT;		//接ベクトル
+    //float3 biNormal		: BINORMAL;		//従ベクトル
+    //float3 normalInView : TEXCOORD2;	//カメラ空間の法線
+    //float4 posInProj    : TEXCOORD3;    //輪郭線の為の変数
 };
 
 ////////////////////////////////////////////////
@@ -76,10 +85,21 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 		m = mWorld;
 	}
 	psIn.pos = mul(m, vsIn.pos);
+	psIn.worldPos = psIn.pos;
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 
+	//頂点法線をピクセルシェーダーに渡す
+	//psIn.normal=normalize(mul(m,vsIn.normal));
+	//接ベクトルと従ベクトルをワールド空間に変換する
+	//psIn.tangent=normalize(mul(m,vsIn.tangent));
+	//psIn.biNormal=normalize(mul(m,vsIn.biNormal));
+
 	psIn.uv = vsIn.uv;
+
+	//psIn.normalInView=mul(mView,psIn.normal);
+
+	//psIn.posInProj=psIn.pos;
 
 	return psIn;
 }

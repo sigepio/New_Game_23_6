@@ -4,6 +4,7 @@
 
 namespace nsK2EngineLow {
 	K2EngineLow* g_engine = nullptr;
+	
 	GameTime* g_gameTime = nullptr;
 
 	K2EngineLow::~K2EngineLow()
@@ -23,6 +24,7 @@ namespace nsK2EngineLow {
 	}
 	void K2EngineLow::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	{
+		RenderingEngine::CreateInstance();
 		if (hwnd) {
 			//グラフィックエンジンの初期化。
 			m_graphicsEngine = new GraphicsEngine();
@@ -88,6 +90,8 @@ namespace nsK2EngineLow {
 		GameObjectManager::GetInstance()->ExecuteUpdate();
 		// エフェクトエンジンの更新。
 		EffectEngine::GetInstance()->Update(g_gameTime->GetFrameDeltaTime());
+
+
 	}
 	/// <summary>
 	/// 描画処理を実行。
@@ -98,6 +102,7 @@ namespace nsK2EngineLow {
 		// ゲームオブジェクトマネージャーの描画処理を実行。
 		GameObjectManager::GetInstance()->ExecuteRender(renderContext);
 		
+		RenderingEngine::GetInstance()->Execute(renderContext);
 	}
 
 	/// <summary>
