@@ -1,4 +1,5 @@
 #pragma once
+#include "SceneLight.h"
 
 namespace nsK2EngineLow {
 
@@ -24,6 +25,22 @@ namespace nsK2EngineLow {
 		void Init();
 		void CopyMainRenderTargetToFrameBuffer(RenderContext& rc);
 
+		//ディレクションライトの設定
+		void SetDirectionLight(Vector3 direction, Vector3 color)
+		{
+			m_sceneLight.SetDirectionLight(direction, color);
+		}
+
+		//ポイントライトの設定
+		void SetPointLight(int num, Vector3 position, float range, Vector3 color)
+		{
+			m_sceneLight.SetPointLight(num, position, range, color);
+		}
+		//スポットライトの設定
+		void SetSpotLight(int num, Vector3 position, float range, Vector3 color, Vector3 direction, float angle)
+		{
+			m_sceneLight.SetSpotLight(num, position, range, color, direction, angle);
+		}
 
 		void AddModelRenderObject(ModelRender* modelRender)
 		{
@@ -43,10 +60,15 @@ namespace nsK2EngineLow {
 
 
 		//取得系の関数
-		/*RenderTarget& GetMainRenderTarget()
+		SceneLight& GetLightingCB()
 		{
-			return m_mainRenderTarget;
-		}*/
+			return m_sceneLight;
+		}
+
+		Light& GetLightCB()
+		{
+			return m_sceneLight.GetLight();
+		}
 
 		static void CreateInstance()
 		{
@@ -66,6 +88,8 @@ namespace nsK2EngineLow {
 			return m_instance;
 		}
 	private:
+		SceneLight m_sceneLight;
+
 		/*RenderTarget m_mainRenderTarget;*/
 
 		/*Sprite		 m_mainSprite;*/
