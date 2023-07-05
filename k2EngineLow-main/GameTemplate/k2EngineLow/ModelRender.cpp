@@ -32,8 +32,8 @@ namespace nsK2EngineLow {
 			// ƒ‚ƒfƒ‹‚Ì‰Šú‰»
 			modelInitData.m_tkmFilePath = filePath;
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
-			/*modelInitData.m_expandConstantBuffer = RenderingEngine::GetInstance()->GetLightCB();
-			modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()GetLightCB());*/
+			modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
+			modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
 			modelInitData.m_modelUpAxis = enModelUpAxis;
 
 		//	//—ÖŠsü‚Ìˆ—
