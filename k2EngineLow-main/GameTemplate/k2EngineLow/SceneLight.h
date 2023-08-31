@@ -26,6 +26,15 @@ namespace nsK2EngineLow {
 		Vector3 ligDirection;
 		float ligAngle;
 	};
+	//環境ライト構造体
+	struct HemLight
+	{
+		Vector3 groundColor;
+		float pad0;
+		Vector3 skyColor;
+		float pad1;
+		Vector3 groundNormal;
+	};
 
 	//ライト構造体
 	struct Light
@@ -39,6 +48,10 @@ namespace nsK2EngineLow {
 		//
 		PointLight pointLight[10];		//ポイントライトの配列
 		SpotLight spotLight[10];		//スポットライトの配列
+		HemLight hemLight;				//半球ライトの配列
+		float pad3;
+		//
+		Matrix m_LVP;					//ライトビュースクリーン配列
 	};
 	class SceneLight
 	{
@@ -54,7 +67,12 @@ namespace nsK2EngineLow {
 			m_light.directionLight.ligDirection = direction;
 			m_light.directionLight.ligColor = color;
 		}
-
+		void SetAmbientLight(float x, float y, float z)
+		{
+			m_light.ambientLight.x = x;
+			m_light.ambientLight.y = y;
+			m_light.ambientLight.z = z;
+		}
 		void SetPointLight(int num, Vector3 position, float range, Vector3 color)
 		{
 			m_light.pointLight[num].ligPosition = position;
@@ -68,6 +86,16 @@ namespace nsK2EngineLow {
 			m_light.spotLight[num].ligColor = color;
 			m_light.spotLight[num].ligDirection = direction;
 			m_light.spotLight[num].ligAngle = angle;
+		}
+		void SetHemLight(Vector3 groundColor, Vector3 skyColor, Vector3 groundNormal)
+		{
+			m_light.hemLight.groundColor = groundColor;
+			m_light.hemLight.skyColor = skyColor;
+			m_light.hemLight.groundNormal = groundNormal;
+		}
+		void SetLVP(Matrix mat)
+		{
+			m_light.m_LVP = mat;
 		}
 		Light& GetLight()
 		{

@@ -64,9 +64,9 @@ namespace nsK2EngineLow {
 	/// <summary>
 	/// 3次元ベクトル。
 	/// </summary>
-	class Vector3{
+	class Vector3 {
 	public:
-		union{
+		union {
 			DirectX::XMFLOAT3 vec;
 			float v[3];
 			struct { float x, y, z; };
@@ -165,7 +165,7 @@ namespace nsK2EngineLow {
 		{
 			Set(_v.x, _v.y, _v.z);
 		}
-		
+
 		/// <summary>
 		/// ベクトルの加算。
 		/// </summary>
@@ -173,7 +173,7 @@ namespace nsK2EngineLow {
 		/// this += _v;
 		/// </remarks>
 		/// <param name="_v">加算されるベクトル。</param>
-		void Add( const Vector3& _v) 
+		void Add(const Vector3& _v)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&_v.vec);
@@ -186,7 +186,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this = v0 + v1;
 		/// </remarks>
-		void Add( const Vector3& v0, const Vector3& v1 )
+		void Add(const Vector3& v0, const Vector3& v1)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&v0.vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&v1.vec);
@@ -199,7 +199,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this -= _v;
 		/// </remarks>
-		void Subtract( const Vector3& _v )
+		void Subtract(const Vector3& _v)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&_v.vec);
@@ -212,7 +212,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this = v0 - v1;
 		/// </remarks>
-		void Subtract( const Vector3& v0, const Vector3& v1 )
+		void Subtract(const Vector3& v0, const Vector3& v1)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&v0.vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&v1.vec);
@@ -227,7 +227,7 @@ namespace nsK2EngineLow {
 		/// float d = this->x * _v.x + this->y * _v.y + this->z * _v.z;
 		/// return d;
 		/// </remarks>
-		float Dot( const Vector3& _v ) const
+		float Dot(const Vector3& _v) const
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&_v.vec);
@@ -346,7 +346,7 @@ namespace nsK2EngineLow {
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat3(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat3(&v.vec);
-			DirectX::XMStoreFloat3(&vec,  DirectX::XMVectorMax(xmv0, xmv1));
+			DirectX::XMStoreFloat3(&vec, DirectX::XMVectorMax(xmv0, xmv1));
 		}
 
 		/// <summary>
@@ -387,7 +387,7 @@ namespace nsK2EngineLow {
 		/// Vector3 v = {20.0f, 30.0f, 40.0f};
 		///	v *= 10;
 		/// </remarks>
-		const Vector3& operator*=(float s) 
+		const Vector3& operator*=(float s)
 		{
 			Scale(s);
 			return *this;
@@ -423,9 +423,9 @@ namespace nsK2EngineLow {
 	/// <summary>
 	/// 4次元ベクトルクラス。
 	/// </summary>
-	class Vector4{
+	class Vector4 {
 	public:
-		union{
+		union {
 			DirectX::XMFLOAT4 vec;
 			struct { float x, y, z, w; };
 			struct { float r, g, b, a; };
@@ -466,7 +466,7 @@ namespace nsK2EngineLow {
 			dst.z = z;
 			dst.w = w;
 		}
-	
+
 		/// <summary>
 		/// 代入演算子。
 		/// </summary>
@@ -545,7 +545,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this += _v;
 		/// </remarks>
-		void Add( const Vector4& _v )
+		void Add(const Vector4& _v)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&_v.vec);
@@ -558,7 +558,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this = v0 + v1;
 		/// </remarks>
-		void Add( const Vector4& v0, const Vector4& v1 )
+		void Add(const Vector4& v0, const Vector4& v1)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&v0.vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&v1.vec);
@@ -571,7 +571,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this -= _v;
 		/// </remarks>
-		void Subtract( const Vector4& _v )
+		void Subtract(const Vector4& _v)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&_v.vec);
@@ -584,7 +584,7 @@ namespace nsK2EngineLow {
 		/// <remarks>
 		/// this = v0 - v1;
 		/// </remarks>
-		void Subtract( const Vector4& v0, const Vector4& v1 )
+		void Subtract(const Vector4& v0, const Vector4& v1)
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&v0.vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&v1.vec);
@@ -599,7 +599,7 @@ namespace nsK2EngineLow {
 		/// float d = this->x * _v.x + this->y * _v.y + this->z * _v.z + this->w * _v.w;
 		/// return d;
 		/// </remarks>
-		float Dot( const Vector4& _v ) const
+		float Dot(const Vector4& _v) const
 		{
 			DirectX::XMVECTOR xmv0 = DirectX::XMLoadFloat4(&vec);
 			DirectX::XMVECTOR xmv1 = DirectX::XMLoadFloat4(&_v.vec);
@@ -684,6 +684,8 @@ namespace nsK2EngineLow {
 	const Vector3 g_vec3AxisY = { 0.0f,  1.0f,  0.0f };
 	const Vector3 g_vec3AxisZ = { 0.0f,  0.0f,  1.0f };
 	const Vector3 g_vec3One = { 1.0f, 1.0f, 1.0f };
+	const Vector3 g_vec3Naname = { 1.0f, -1.0f, -1.0f };
+	const Vector3 g_vec3Naname2 = { 1.0f, -1.0f, 1.0f };
 
 	const Vector4 g_vec4White = { 1.0f, 1.0f, 1.0f, 1.0f };
 	const Vector4 g_vec4Black = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -693,10 +695,10 @@ namespace nsK2EngineLow {
 	/// <summary>
 	/// クォータニオンクラス。
 	/// </summary>
-	class Quaternion : public Vector4{
+	class Quaternion : public Vector4 {
 	public:
 		static const Quaternion Identity;		//!<単位クォータニオン。
-		Quaternion() 
+		Quaternion()
 		{
 			x = y = z = 0.0f;
 			w = 1.0f;
@@ -768,14 +770,14 @@ namespace nsK2EngineLow {
 			SetRotationDeg(g_vec3AxisZ, angle);
 		}
 
-	
+
 
 		/// <summary>
 		/// 任意の軸周りの回転クォータニオンを作成。
 		/// </summary>
 		/// <param name="axis">回転軸</param>
 		/// <param name="angle">回転角度。単位ラジアン。</param>
-		void SetRotation( const Vector3& axis, float angle )
+		void SetRotation(const Vector3& axis, float angle)
 		{
 			float s;
 			float halfAngle = angle * 0.5f;
@@ -810,7 +812,7 @@ namespace nsK2EngineLow {
 		/// </summary>
 		/// <param name="from">回転前のベクトル</param>
 		/// <param name="to">回転後のベクトル</param>
-		void SetRotation( Vector3 from,  Vector3 to);
+		void SetRotation(Vector3 from, Vector3 to);
 		/// <summary>
 		/// 球面線形補完
 		/// </summary>
@@ -925,6 +927,9 @@ namespace nsK2EngineLow {
 			y = pw * qy - px * qz + py * qw + pz * qx;
 			z = pw * qz + px * qy - py * qx + pz * qw;
 		}
+
+		
+
 		/// <summary>
 		/// クォータニオンの代入乗算演算子
 		/// </summary>
@@ -932,6 +937,19 @@ namespace nsK2EngineLow {
 		{
 			Multiply(rot0, *this);
 			return *this;
+		}
+
+
+
+		void Multiply(Vector4& _v)
+		{
+			DirectX::XMVECTOR xmv = DirectX::XMVector3Rotate(_v, *this);
+			DirectX::XMStoreFloat4(&_v.vec, xmv);
+		}
+		void Multiply(Vector3& _v)
+		{
+			DirectX::XMVECTOR xmv = DirectX::XMVector3Rotate(_v, *this);
+			DirectX::XMStoreFloat3(&_v.vec, xmv);
 		}
 		/// <summary>
 		/// ベクトルにクォータニオンを適用する。
@@ -950,7 +968,7 @@ namespace nsK2EngineLow {
 			DirectX::XMStoreFloat3(&_v.vec, xmv);
 		}
 	};
-	
+
 	//整数型のベクトルクラス。
 	__declspec(align(16)) class Vector4i {
 	public:
@@ -1057,6 +1075,43 @@ namespace nsK2EngineLow {
 		return v0.Dot(v1);
 	}
 
+	/// <summary>
+		/// クォータニオンをオイラー角に変換
+		/// </summary>
+	static inline Vector3 Calc(const Quaternion& q) {
+
+
+
+		// 回転行列を計算する
+		float m[3][3];
+		m[0][0] = 1 - 2 * (q.y * q.y + q.z * q.z);
+		m[0][1] = 2 * (q.x * q.y - q.w * q.z);
+		m[0][2] = 2 * (q.x * q.z + q.w * q.y);
+		m[1][0] = 2 * (q.x * q.y + q.w * q.z);
+		m[1][1] = 1 - 2 * (q.x * q.x + q.z * q.z);
+		m[1][2] = 2 * (q.y * q.z - q.w * q.x);
+		m[2][0] = 2 * (q.x * q.z - q.w * q.y);
+		m[2][1] = 2 * (q.y * q.z + q.w * q.x);
+		m[2][2] = 1 - 2 * (q.x * q.x + q.y * q.y);
+
+
+
+		// 回転行列からオイラー角を計算する
+		Vector3 euler;
+		euler.x = std::atan2(m[1][2], m[2][2]);
+		euler.y = std::asin(-m[0][2]);
+		euler.z = std::atan2(m[0][1], m[0][0]);
+
+
+
+		euler.x = euler.x * 180 / Math::PI;
+		euler.y = euler.y * 180 / Math::PI;
+		euler.z = euler.z * 180 / Math::PI;
+
+
+
+		return euler;
+	}
 
 	/// <summary>
 	/// クォータニオン同士の乗算。

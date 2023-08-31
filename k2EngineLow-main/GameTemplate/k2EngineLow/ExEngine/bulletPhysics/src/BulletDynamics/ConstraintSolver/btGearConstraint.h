@@ -15,8 +15,8 @@ subject to the following restrictions:
 
 
 
-#ifndef BT_GEAR_CONSTRAINT_H
-#define BT_GEAR_CONSTRAINT_H
+#ifndef BT_Gear_CONSTRAINT_H
+#define BT_Gear_CONSTRAINT_H
 
 #include "BulletDynamics/ConstraintSolver/btTypedConstraint.h"
 
@@ -133,13 +133,13 @@ SIMD_FORCE_INLINE	int	btGearConstraint::calculateSerializeBufferSize() const
 	///fills the dataBuffer and returns the struct name (and 0 on failure)
 SIMD_FORCE_INLINE	const char*	btGearConstraint::serialize(void* dataBuffer, btSerializer* serializer) const
 {
-	btGearConstraintData* gear = (btGearConstraintData*)dataBuffer;
-	btTypedConstraint::serialize(&gear->m_typeConstraintData,serializer);
+	btGearConstraintData* Gear = (btGearConstraintData*)dataBuffer;
+	btTypedConstraint::serialize(&Gear->m_typeConstraintData,serializer);
 
-	m_axisInA.serialize( gear->m_axisInA );
-	m_axisInB.serialize( gear->m_axisInB );
+	m_axisInA.serialize( Gear->m_axisInA );
+	m_axisInB.serialize( Gear->m_axisInB );
 
-	gear->m_ratio = m_ratio;
+	Gear->m_ratio = m_ratio;
 
 	return btGearConstraintDataName;
 }
@@ -149,4 +149,4 @@ SIMD_FORCE_INLINE	const char*	btGearConstraint::serialize(void* dataBuffer, btSe
 
 
 
-#endif //BT_GEAR_CONSTRAINT_H
+#endif //BT_Gear_CONSTRAINT_H

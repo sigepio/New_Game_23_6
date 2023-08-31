@@ -105,9 +105,10 @@ namespace nsK2EngineLow {
 			m_model.Draw(rc,1);
 		}
 
-		/*void OnShadowDraw(RenderContext& rc) {
+		void OnShadowDraw(RenderContext& rc)
+		{
 			m_shadowModel.Draw(rc, RenderingEngine::GetInstance()->GetLightCamera());
-		}*/
+		}
 
 		void PlayFlash() {
 			m_flashFlag = true;
