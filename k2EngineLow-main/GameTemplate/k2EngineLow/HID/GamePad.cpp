@@ -93,22 +93,31 @@ namespace nsK2EngineLow {
 			}
 		}
 		//左トリガー。
+		//if (xInputState.Gamepad.bLeftTrigger > 5) {
+		//	m_trigger[enButtonLB2] = 1 ^ m_press[enButtonLB2];
+		//	m_press[enButtonLB2] = 1;
+		//}
+		//else {
+		//	m_trigger[enButtonLB2] = 0;
+		//	m_press[enButtonLB2] = 0;
+		//}
+
+		//左トリガー(入力量取得可能)
 		if (xInputState.Gamepad.bLeftTrigger != 0) {
-			m_trigger[enButtonLB2] = 1 ^ m_press[enButtonLB2];
-			m_press[enButtonLB2] = 1;
+			m_ltrigger = static_cast<float>(xInputState.Gamepad.bLeftTrigger);
 		}
 		else {
-			m_trigger[enButtonLB2] = 0;
-			m_press[enButtonLB2] = 0;
+			xInputState.Gamepad.bLeftTrigger = 0;
+			m_ltrigger = 0;
 		}
-		//右トリガー
+
+		//右トリガー(入力量取得可能)
 		if (xInputState.Gamepad.bRightTrigger != 0) {
-			m_trigger[enButtonRB2] = 1 ^ m_press[enButtonRB2];
-			m_press[enButtonRB2] = 1;
+			m_rtrigger = static_cast<float>(xInputState.Gamepad.bRightTrigger);
 		}
 		else {
-			m_trigger[enButtonRB2] = 0;
-			m_press[enButtonRB2] = 0;
+			xInputState.Gamepad.bRightTrigger = 0;
+			m_rtrigger = 0;
 		}
 		if ((xInputState.Gamepad.sThumbLX < INPUT_DEADZONE &&
 			xInputState.Gamepad.sThumbLX > -INPUT_DEADZONE) &&
@@ -205,7 +214,7 @@ namespace nsK2EngineLow {
 			//接続されている。
 			m_state.bConnected = true;
 			UpdateCore(m_state.state);
-			
+
 		}
 		else {
 			//接続されていない場合はキーボードの入力でエミュレートする。

@@ -2,7 +2,7 @@
 
 #pragma once
 
-namespace nsK2EngineLow {	
+namespace nsK2EngineLow {
 	/// <summary>
 	/// 仮想ボタン定義
 	/// </summary>
@@ -32,7 +32,7 @@ namespace nsK2EngineLow {
 	class GamePad : public Noncopyable {
 	public:
 		static const int CONNECT_PAD_MAX = 4;		//接続可能なパッドの最大数。
-		
+
 		/// <summary>
 		/// パッドステータス
 		/// </summary>
@@ -41,13 +41,13 @@ namespace nsK2EngineLow {
 			XINPUT_STATE state;
 			bool bConnected;
 		};
-		
+
 
 		/// <summary>
 		/// コンストラクタ
 		/// </summary>
 		GamePad();
-	
+
 		/// <summary>
 		/// デストラクタ
 		/// </summary>
@@ -71,7 +71,7 @@ namespace nsK2EngineLow {
 		/// </summary>
 		/// <param name="xInputState">キー入力</param>
 		void Update(const XINPUT_STATE& xInputState);
-		
+
 		/// <summary>
 		/// ボタンのトリガー判定
 		/// </summary>
@@ -81,7 +81,16 @@ namespace nsK2EngineLow {
 		{
 			return m_trigger[button] != 0;
 		}
-		
+
+		/// <summary>
+		/// ボタンのトリガー判定フラグを下げる
+		/// </summary>
+		/// <param name="button">判定したいボタン</param>
+		void SetTriggerFlagFalse(EnButton button)
+		{
+			m_trigger[button] = 0;
+		}
+
 		/// <summary>
 		/// ボタンが押されているか判定
 		/// </summary>
@@ -123,7 +132,7 @@ namespace nsK2EngineLow {
 		{
 			return m_lStickX;
 		}
-		
+
 		/// <summary>
 		/// 左スティックのY軸の入力量を取得。
 		/// </summary>
@@ -132,7 +141,8 @@ namespace nsK2EngineLow {
 		{
 			return m_lStickY;
 		}
-		
+
+
 
 		/// <summary>
 		/// 右スティックのX軸の入力量を取得。
@@ -142,7 +152,7 @@ namespace nsK2EngineLow {
 		{
 			return m_rStickX;
 		}
-		
+
 		/// <summary>
 		/// 右スティックのY軸の入力量を取得
 		/// </summary>
@@ -151,8 +161,17 @@ namespace nsK2EngineLow {
 		{
 			return m_rStickY;
 		}
-		
-		
+
+
+		float GetRTrigger()const
+		{
+			return m_rtrigger;
+		}
+		float GetLTrigger()const
+		{
+			return m_ltrigger;
+		}
+
 		/// <summary>
 		/// フレームの開始時に呼び出す必要がある関数
 		/// </summary>
@@ -190,6 +209,8 @@ namespace nsK2EngineLow {
 		float m_lStickY = 0.0f;		// 左スティックのY軸の入力量。
 		float m_rStickX = 0.0f;		// 右スティックのX軸の入力量。
 		float m_rStickY = 0.0f;		// 右スティックのY軸の入力量。
+		float m_rtrigger = 0.0f;
+		float m_ltrigger = 0.0f;
 
 		static EnXInputPadState m_padStates[MAX_PAD];
 	};

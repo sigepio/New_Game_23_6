@@ -108,6 +108,10 @@ float3 CalcLambertDiffuse(float3 lightDirection, float3 lightColor, float3 norma
 float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldPos, float3 normal);
 float3 CalcLigFromPointLight(SPSIn psIn, int num);
 float3 CalcLigFromSpotLight(SPSIn psIn, int num);
+float3 CalcLimPower(SPSIn psIn);
+float3 CalcLigFromHemLight(SPSIn psIn);
+float3 CalcNormalMap(SPSIn psIn);
+float3 CalcSpecularMap(SPSIn psIn);
 /// <summary>
 //スキン行列を計算する。
 /// </summary>
@@ -144,16 +148,18 @@ SPSIn VSMainCore(SVSIn vsIn, uniform bool hasSkin)
 	psIn.pos = mul(mView, psIn.pos);
 	psIn.pos = mul(mProj, psIn.pos);
 
+
+    psIn.normal=mul(mWorld,vsIn.normal);
 	//頂点法線をピクセルシェーダーに渡す
 	//psIn.normal=normalize(mul(m,vsIn.normal));
 	//接ベクトルと従ベクトルをワールド空間に変換する
-	//psIn.tangent=normalize(mul(m,vsIn.tangent));
-	//psIn.biNormal=normalize(mul(m,vsIn.biNormal));
+	psIn.tangent=normalize(mul(m,vsIn.tangent));
+	psIn.biNormal=normalize(mul(m,vsIn.biNormal));
 
-	psIn.normal=mul(mWorld,vsIn.normal);
+	
 	psIn.uv = vsIn.uv;
 
-
+    psIn.normalInView = mul(mView, psIn.normal);//カメラ空間の法線を求める
 	//psIn.posInProj=psIn.pos;
 
 	return psIn;
@@ -172,6 +178,12 @@ SPSIn VSMain(SVSIn vsIn)
 SPSIn VSSkinMain( SVSIn vsIn ) 
 {
 	return VSMainCore(vsIn, true);
+}
+// シャドウモデルのピクセルシェーダーのエントリー関数
+float4 PSShadowMain(SPSIn psIn) : SV_Target0
+{
+    // シャドウマップにZ値を描き込む
+    return float4(psIn.pos.z, psIn.pos.z, psIn.pos.z, 1.0f);
 }
 /// <summary>
 /// ピクセルシェーダーのエントリー関数。
@@ -194,6 +206,20 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
         
     }
 
+    //リムの計算
+    float3 limColor = CalcLimPower(psIn);
+
+    //半球ライトの計算
+    float3 hemLig = CalcLigFromHemLight(psIn);
+
+    //法線マップの計算
+    float3 normalMap = CalcNormalMap(psIn);
+
+    //スペキュラーマップの計算
+    float3 specularMap = CalcSpecularMap(psIn);
+
+
+    lig+=(hemLig+normalMap+specularMap);
 
 	for (int i = 0; i < 10; i++)
     {
@@ -201,6 +227,13 @@ float4 PSMain( SPSIn psIn ) : SV_Target0
 		lig += spotLig[i];
         
     }
+
+
+    //最終的な反射光にリムの反射光を合算する
+    lig += limColor;
+
+    
+
 	float4 albedoColor = g_albedo.Sample(g_sampler, psIn.uv);
 	albedoColor.xyz*=lig;
 	return albedoColor;
@@ -246,6 +279,7 @@ float3 CalcPhongSpecular(float3 lightDirection, float3 lightColor, float3 worldP
 	// 鏡面反射光を求める
     return lightColor * t;
 }
+
 float3 CalcLigFromPointLight(SPSIn psIn, int num)
 {
 	// このサーフェイスに入射しているポイントライトの光の向きを計算する
@@ -342,4 +376,86 @@ float3 CalcLigFromSpotLight(SPSIn psIn, int num)
     specSpot *= affect;
 	
     return diffSpot + specSpot;
+}
+
+float3 CalcLimPower(SPSIn psIn)
+{
+	//サーフェイスの法線と光の入射方向に依存するリムの強さを求める
+    float power1 = 1.0f - max(0.0f, dot(directionLight.dirDirection, psIn.normal));
+	//サーフェイスの法線と視線の方向に依存するリムの強さを求める
+    float power2 = 1.0f - max(0.0f, psIn.normalInView.z * -1.0f);
+	//最終的なリムの強さを求める
+    float limPower = power1 * power2;
+	//pow()を使用し強さの変化を指数関数的にする
+    limPower = pow(limPower, 1.3f);
+	
+	//リムライトのカラーを計算し、返す
+    return limPower * directionLight.dirColor;
+}
+
+float3 CalcLigFromHemLight(SPSIn psIn)
+{
+	//サーフェイスの法線と地面の法線との内積を計算する
+    float t = dot(psIn.normal, hemLight.heGroundNormal);
+	//内積の結果を0～1の範囲に変換
+    t = (t + 1.0f) / 2.0f;
+	//地面と天球色を補完率tで線形補完し、返す
+    return lerp(hemLight.heGroundColor, hemLight.heSkyColor, t);
+}
+
+float3 CalcNormalMap(SPSIn psIn)
+{
+    //ディフュ－ズマップをサンプリング
+    float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
+    float3 normal = psIn.normal;
+    //法線マップからタンジェントスペースの法線をサンプリングする
+    float3 localNormal = g_normalMap.Sample(g_sampler, psIn.uv).xyz;
+    //タンジェントスペースの法線を0～1の範囲から-1～1の範囲に復元する
+    localNormal = (localNormal - 0.5f) * 2.0f;
+    //タンジェントスペースの法線をワールドスペースに変換する
+    normal = psIn.tangent * localNormal.x
+           + psIn.biNormal * localNormal.y
+           + normal * localNormal.z;
+    //拡散反射を計算し、返す
+    return max(0.0f, dot(normal, -directionLight.dirDirection)) * directionLight.dirColor;
+}
+
+float3 CalcNormal(float3 normal, float3 tangent, float3 biNormal, float2 uv)
+{
+    float3 binSpaceNormal = g_normalMap.SampleLevel(g_sampler, uv, 0.0f).xyz;
+    binSpaceNormal = (binSpaceNormal * 2.0f) - 1.0f;
+    
+    float3 newNormal = tangent * binSpaceNormal.x + biNormal * binSpaceNormal.y + normal * binSpaceNormal.z;
+
+    return newNormal;
+}
+
+float3 CalcSpecularMap(SPSIn psIn)
+{
+    //ディフューズマップをサンプリング
+    float4 diffuseMap = g_albedo.Sample(g_sampler, psIn.uv);
+    //ノーマルマップを元に法線を計算
+    float3 normal = CalcNormal(psIn.normal, psIn.tangent, psIn.biNormal, psIn.uv);
+    //拡散反射光を計算
+    float3 diffuseLig = max(0.0f, dot(normal, -directionLight.dirDirection)) * directionLight.dirColor;
+    
+    //鏡面反射光を計算
+    //反射ベクトルを求める
+    float3 refVec = reflect(directionLight.dirDirection, normal);
+    //光が当たったサーフェイスから視点に伸びるベクトルを求める
+    float3 toEye = eyePos - psIn.worldPos;
+    toEye = normalize(toEye);
+    //鏡面反射の強さを求める
+    float t = saturate(dot(refVec, toEye));
+    //鏡面反射の強さを絞る
+    t = pow(t, 5.0f);
+    //鏡面反射光を求める
+    float3 specLig = directionLight.dirColor * t;
+    
+    //スペキュラマップからスペキュラ反射の強さをサンプリング
+    float specPower = g_specularMap.Sample(g_sampler, psIn.uv).r;
+    //鏡面反射の強さを鏡面反射光に乗算する
+    specLig *= specPower * 50.0f; // ＜ー ここの倍率変更で光り方が変わる
+    
+    return specLig;
 }

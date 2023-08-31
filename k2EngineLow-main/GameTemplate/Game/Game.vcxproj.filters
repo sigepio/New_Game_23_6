@@ -12,6 +12,19 @@
       <Filter>system</Filter>
     </ClCompile>
     <ClCompile Include="Test.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="CarBase.cpp" />
+    <ClCompile Include="TimeTrialMode.cpp" />
+    <ClCompile Include="Car_RB6.cpp" />
+    <ClCompile Include="Lighting.cpp" />
+    <ClCompile Include="FrontWheelBase.cpp" />
+    <ClCompile Include="RightFrontWheel.cpp" />
+    <ClCompile Include="LeftFrontWheel.cpp" />
+    <ClCompile Include="RightRearWheel.cpp" />
+    <ClCompile Include="LeftRearWheel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -19,5 +32,18 @@
       <Filter>system</Filter>
     </ClInclude>
     <ClInclude Include="Test.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="CarBase.h" />
+    <ClInclude Include="TimeTrialMode.h" />
+    <ClInclude Include="Car_RB6.h" />
+    <ClInclude Include="Lighting.h" />
+    <ClInclude Include="FrontWheelBase.h" />
+    <ClInclude Include="RightFrontWheel.h" />
+    <ClInclude Include="LeftFrontWheel.h" />
+    <ClInclude Include="RightRearWheel.h" />
+    <ClInclude Include="LeftRearWheel.h" />
   </ItemGroup>
 </Project>

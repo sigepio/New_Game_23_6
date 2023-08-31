@@ -18,7 +18,7 @@ subject to the following restrictions:
 #include "btGearConstraint.h"
 
 btGearConstraint::btGearConstraint(btRigidBody& rbA, btRigidBody& rbB, const btVector3& axisInA,const btVector3& axisInB, btScalar ratio)
-:btTypedConstraint(GEAR_CONSTRAINT_TYPE,rbA,rbB),
+:btTypedConstraint(Gear_CONSTRAINT_TYPE,rbA,rbB),
 m_axisInA(axisInA),
 m_axisInB(axisInB),
 m_ratio(ratio)

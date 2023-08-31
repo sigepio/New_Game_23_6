@@ -28,7 +28,7 @@ namespace nsK2EngineLow {
 		//モデルの初期化
 		ModelInitDataFR modelInitData;
 		//影をを落とす方か落とされる方かでシェーダーを変える
-		//if (m_shadowDrop == true) {
+		if (m_shadowDrop == true) {
 			// モデルの初期化
 			modelInitData.m_tkmFilePath = filePath;
 			modelInitData.m_fxFilePath = "Assets/shader/model.fx";
@@ -43,37 +43,37 @@ namespace nsK2EngineLow {
 		//	InitCommon(filePath, animationClips);
 
 
-		//	// シャドウマップに描画するモデルを初期化
-		//	ModelInitData shadowModelInitData;
-		//	shadowModelInitData.m_tkmFilePath = filePath;
-		//	shadowModelInitData.m_fxFilePath = "Assets/shader/model.fx";
-		//	shadowModelInitData.m_psEntryPointFunc = "PSShadowMain";
-		//	shadowModelInitData.m_modelUpAxis = enModelUpAxis;
-		//	// カラーバッファーのフォーマットに変更が入ったので、こちらも変更する
-		//	shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
+			// シャドウマップに描画するモデルを初期化
+			ModelInitData shadowModelInitData;
+			shadowModelInitData.m_tkmFilePath = filePath;
+			shadowModelInitData.m_fxFilePath = "Assets/shader/sampleDrawShadowMap.fx";
+			//shadowModelInitData.m_psEntryPointFunc = "PSShadowMain";
+			shadowModelInitData.m_modelUpAxis = enModelUpAxis;
+			// カラーバッファーのフォーマットに変更が入ったので、こちらも変更する
+			shadowModelInitData.m_colorBufferFormat[0] = DXGI_FORMAT_R32_FLOAT;
 
-		//	//アニメーション有無でエントリーポイントを変える
-		//	if (animationClips != nullptr) {
-		//		shadowModelInitData.m_skeleton = &m_skeleton;
-		//		shadowModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
-		//	}
-		//	else {
-		//		shadowModelInitData.m_vsEntryPointFunc = "VSMain";
-		//	}
+			//アニメーション有無でエントリーポイントを変える
+			if (animationClips != nullptr) {
+				shadowModelInitData.m_skeleton = &m_skeleton;
+				shadowModelInitData.m_vsSkinEntryPointFunc = "VSSkinMain";
+			}
+			else {
+				shadowModelInitData.m_vsEntryPointFunc = "VSMain";
+			}
 
-		//	m_shadowModel.Init(shadowModelInitData);
-		//}
-		//else {
-		//	// 影を受ける背景モデルを初期化
-		//	modelInitData.m_tkmFilePath = filePath;
-		//	// シャドウレシーバー(影が落とされるモデル)用のシェーダーを指定する
-		//	modelInitData.m_fxFilePath = "Assets/shader/shadowReciever.fx";
-		//	// シャドウマップを拡張SRVに設定する
-		//	modelInitData.m_expandShaderResoruceView[1] = RenderingEngine::GetInstance()->GetShadowTarget().GetRenderTargetTexture();
-		//	// ライトビュープロジェクション行列を拡張定数バッファーに設定する
-		//	modelInitData.m_expandConstantBuffer = RenderingEngine::GetInstance()->GetLightCB();
-		//	modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()GetLightCB());
-		//}
+			m_shadowModel.Init(shadowModelInitData);
+		}
+		else {
+			// 影を受ける背景モデルを初期化
+			modelInitData.m_tkmFilePath = filePath;
+			// シャドウレシーバー(影が落とされるモデル)用のシェーダーを指定する
+			modelInitData.m_fxFilePath = "Assets/shader/shadowReciever.fx";
+			// シャドウマップを拡張SRVに設定する
+			modelInitData.m_expandShaderResoruceView[1] = &RenderingEngine::GetInstance()->GetShadowTarget().GetRenderTargetTexture();
+			// ライトビュープロジェクション行列を拡張定数バッファーに設定する
+			modelInitData.m_expandConstantBuffer = &RenderingEngine::GetInstance()->GetLightCB();
+			modelInitData.m_expandConstantBufferSize = sizeof(RenderingEngine::GetInstance()->GetLightCB());
+		}
 
 		//アニメーション有無でエントリーポイントを変える
 		if (animationClips != nullptr) {

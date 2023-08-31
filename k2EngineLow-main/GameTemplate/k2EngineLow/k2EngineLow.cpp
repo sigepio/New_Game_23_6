@@ -4,7 +4,7 @@
 
 namespace nsK2EngineLow {
 	K2EngineLow* g_engine = nullptr;
-	
+	RenderingEngine* g_renderingEngine = nullptr;
 	GameTime* g_gameTime = nullptr;
 
 	K2EngineLow::~K2EngineLow()
@@ -24,12 +24,13 @@ namespace nsK2EngineLow {
 	}
 	void K2EngineLow::Init(HWND hwnd, UINT frameBufferWidth, UINT frameBufferHeight)
 	{
-		RenderingEngine::CreateInstance();
 		if (hwnd) {
 			//グラフィックエンジンの初期化。
 			m_graphicsEngine = new GraphicsEngine();
 			m_graphicsEngine->Init(hwnd, frameBufferWidth, frameBufferHeight);
 		}
+
+		RenderingEngine::CreateInstance();
 		g_gameTime = &m_gameTime;
 		//ゲームパッドの初期化。
 		for (int i = 0; i < GamePad::CONNECT_PAD_MAX; i++) {
